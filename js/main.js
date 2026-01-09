@@ -1,4 +1,4 @@
-// ===== DOM =====
+// ================= DOM =================
 const buttonAuth = document.querySelector('.button-auth');
 const buttonOut = document.querySelector('.button-out');
 const userName = document.querySelector('.user-name');
@@ -10,110 +10,211 @@ const logInForm = document.querySelector('#logInForm');
 const loginInput = document.querySelector('#login');
 const passwordInput = document.querySelector('#password');
 
-// ===== Scroll control =====
+const cardsRestaurants = document.querySelector('.cards-restaurants');
+const containerPromo = document.querySelector('.container-promo');
+const restaurants = document.querySelector('.restaurants');
+const menu = document.querySelector('.menu');
+const logo = document.querySelector('.logo');
+
+// ================= DATA =================
+const restaurantsData = [
+  {
+    name: 'Піца плюс',
+    image: 'img/pizza-plus/preview.jpg',
+    time: '50 хвилин',
+    rating: '4.5',
+    price: 'від 200 ₴',
+    category: 'Піца'
+  },
+  {
+    name: 'Танукі',
+    image: 'img/tanuki/preview.jpg',
+    time: '60 хвилин',
+    rating: '4.5',
+    price: 'від 1 200 ₴',
+    category: 'Суші, роли'
+  },
+  {
+    name: 'FoodBand',
+    image: 'img/food-band/preview.jpg',
+    time: '40 хвилин',
+    rating: '4.5',
+    price: 'від 150 ₴',
+    category: 'Піца'
+  },
+  {
+    name: 'Ikigai',
+    image: 'img/palki-skalki/preview.jpg',
+    time: '55 хвилин',
+    rating: '4.5',
+    price: 'від 250 ₴',
+    category: 'Піца'
+  },
+  {
+    name: 'Пузата хата',
+    image: 'img/gusi-lebedi/preview.jpg',
+    time: '75 хвилин',
+    rating: '4.5',
+    price: 'від 300 ₴',
+    category: 'Українські страви'
+  },
+  {
+    name: 'PizzaBurger',
+    image: 'img/pizza-burger/preview.jpg',
+    time: '45 хвилин',
+    rating: '4.5',
+    price: 'від 700 ₴',
+    category: 'Піца'
+  }
+];
+
+// ================= SCROLL =================
 window.disableScroll = function () {
-    document.body.dbScrollY = window.scrollY;
-    document.body.style.cssText = `
-        position: fixed;
-        top: -${window.scrollY}px;
-        left: 0;
-        width: 100%;
-        overflow: hidden;
-        height: 100vh;
-    `;
+  document.body.dbScrollY = window.scrollY;
+  document.body.style.cssText = `
+    position: fixed;
+    top: -${window.scrollY}px;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    height: 100vh;
+  `;
 };
 
 window.enableScroll = function () {
-    document.body.style.cssText = '';
-    window.scroll({
-        top: document.body.dbScrollY
-    });
+  document.body.style.cssText = '';
+  window.scrollTo(0, document.body.dbScrollY);
 };
 
-// ===== Modal control =====
+// ================= MODAL =================
 function openAuthModal() {
-    modalAuth.classList.add('is-open');
-    disableScroll();
+  modalAuth.classList.add('is-open');
+  disableScroll();
 
-    // скидання рамок
-    loginInput.style.border = '';
-    passwordInput.style.border = '';
+  loginInput.style.border = '';
+  passwordInput.style.border = '';
 }
 
 function closeAuthModal() {
-    modalAuth.classList.remove('is-open');
-    enableScroll();
+  modalAuth.classList.remove('is-open');
+  enableScroll();
 }
 
-function toggleModalAuth() {
-    modalAuth.classList.toggle('is-open');
-
-    modalAuth.classList.contains('is-open')
-        ? disableScroll()
-        : enableScroll();
-}
-
-// ===== Auth =====
+// ================= AUTH =================
 function logIn(event) {
-    event.preventDefault();
+  event.preventDefault();
 
-    let isValid = true;
+  let valid = true;
 
-    if (loginInput.value.trim() === '') {
-        loginInput.style.border = '2px solid red';
-        isValid = false;
-    }
+  if (!loginInput.value.trim()) {
+    loginInput.style.border = '2px solid red';
+    valid = false;
+  }
 
-    if (passwordInput.value.trim() === '') {
-        passwordInput.style.border = '2px solid red';
-        isValid = false;
-    }
+  if (!passwordInput.value.trim()) {
+    passwordInput.style.border = '2px solid red';
+    valid = false;
+  }
 
-    if (!isValid) return;
+  if (!valid) return;
 
-    localStorage.setItem('login', loginInput.value.trim());
-
-    updateUser();
-    closeAuthModal();
-    logInForm.reset();
+  localStorage.setItem('login', loginInput.value.trim());
+  updateUser();
+  closeAuthModal();
+  logInForm.reset();
 }
 
 function logOut() {
-    localStorage.removeItem('login');
-    updateUser();
+  localStorage.removeItem('login');
+  updateUser();
 }
 
 function updateUser() {
-    const login = localStorage.getItem('login');
+  const login = localStorage.getItem('login');
 
-    if (login) {
-        buttonAuth.style.display = 'none';
-        buttonOut.style.display = 'flex';
-
-        userName.style.display = 'inline';
-        userName.textContent = login;
-    } else {
-        buttonAuth.style.display = 'flex';
-        buttonOut.style.display = 'none';
-
-        userName.style.display = 'none';
-        userName.textContent = '';
-    }
+  if (login) {
+    buttonAuth.style.display = 'none';
+    buttonOut.style.display = 'flex';
+    userName.style.display = 'inline';
+    userName.textContent = login;
+  } else {
+    buttonAuth.style.display = 'flex';
+    buttonOut.style.display = 'none';
+    userName.style.display = 'none';
+  }
 }
 
-// ===== Events =====
+// ================= CARDS =================
+function createRestaurantCard(data) {
+  const card = document.createElement('a');
+  card.className = 'card card-restaurant';
+  card.href = 'restaurant.html';
+
+  card.insertAdjacentHTML('beforeend', `
+    <img src="${data.image}" alt="image" class="card-image" />
+    <div class="card-text">
+      <div class="card-heading">
+        <h3 class="card-title">${data.name}</h3>
+        <span class="card-tag tag">${data.time}</span>
+      </div>
+      <div class="card-info">
+        <div class="rating">${data.rating}</div>
+        <div class="price">${data.price}</div>
+        <div class="category">${data.category}</div>
+      </div>
+    </div>
+  `);
+
+  return card;
+}
+
+function renderRestaurants() {
+  cardsRestaurants.textContent = '';
+  restaurantsData.forEach(item => {
+    cardsRestaurants.insertAdjacentElement(
+      'beforeend',
+      createRestaurantCard(item)
+    );
+  });
+}
+
+// ================= NAVIGATION =================
+function openGoods(event) {
+  const target = event.target;
+  const restaurant = target.closest('.card-restaurant');
+  if (!restaurant) return;
+
+  const login = localStorage.getItem('login');
+  if (!login) {
+    openAuthModal();
+    return;
+  }
+
+  containerPromo.classList.add('hide');
+  restaurants.classList.add('hide');
+  menu.classList.remove('hide');
+}
+
+logo.addEventListener('click', () => {
+  containerPromo.classList.remove('hide');
+  restaurants.classList.remove('hide');
+  menu.classList.add('hide');
+});
+
+// ================= EVENTS =================
 buttonAuth.addEventListener('click', openAuthModal);
 closeAuth.addEventListener('click', closeAuthModal);
 buttonOut.addEventListener('click', logOut);
 logInForm.addEventListener('submit', logIn);
 
-// закриття по кліку на фон
-modalAuth.addEventListener('click', function (event) {
-    if (event.target.classList.contains('modal-auth')) {
-        closeAuthModal();
-    }
+modalAuth.addEventListener('click', (event) => {
+  if (event.target === modalAuth) {
+    closeAuthModal();
+  }
 });
 
-// ===== Init =====
-updateUser();
+cardsRestaurants.addEventListener('click', openGoods);
 
+// ================= INIT =================
+renderRestaurants();
+updateUser();
