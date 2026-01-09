@@ -149,6 +149,7 @@ function createRestaurantCard(data) {
   const card = document.createElement('a');
   card.className = 'card card-restaurant';
   card.href = 'restaurant.html';
+  card.dataset.link = 'restaurant.html';
 
   card.insertAdjacentHTML('beforeend', `
     <img src="${data.image}" alt="image" class="card-image" />
@@ -180,9 +181,10 @@ function renderRestaurants() {
 
 // ================= NAVIGATION =================
 function openGoods(event) {
-  const target = event.target;
-  const restaurant = target.closest('.card-restaurant');
+  const restaurant = event.target.closest('.card-restaurant');
   if (!restaurant) return;
+
+  event.preventDefault(); // ⬅️ СЮДИ, після перевірки
 
   const login = localStorage.getItem('login');
   if (!login) {
@@ -190,9 +192,7 @@ function openGoods(event) {
     return;
   }
 
-  containerPromo.classList.add('hide');
-  restaurants.classList.add('hide');
-  menu.classList.remove('hide');
+  window.location.href = restaurant.dataset.link;
 }
 
 logo.addEventListener('click', () => {
