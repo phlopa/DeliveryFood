@@ -215,6 +215,22 @@ modalAuth.addEventListener('click', (event) => {
 
 cardsRestaurants.addEventListener('click', openGoods);
 
+const swiper = new Swiper('.promo-slider', {
+  loop: true,
+  slidesPerView: 1,
+  spaceBetween: 20,
+
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+
+  autoplay: {
+    delay: 4000,
+    disableOnInteraction: false,
+  },
+});
+
 // ================= INIT =================
 renderRestaurants();
 updateUser();
