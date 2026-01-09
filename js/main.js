@@ -100,7 +100,7 @@ function closeAuthModal() {
   enableScroll();
 }
 
-// ================= AUTH =================
+
 function logIn(event) {
   event.preventDefault();
 
@@ -144,7 +144,7 @@ function updateUser() {
   }
 }
 
-// ================= CARDS =================
+
 function createRestaurantCard(data) {
   const card = document.createElement('a');
   card.className = 'card card-restaurant';
@@ -179,12 +179,12 @@ function renderRestaurants() {
   });
 }
 
-// ================= NAVIGATION =================
+
 function openGoods(event) {
   const restaurant = event.target.closest('.card-restaurant');
   if (!restaurant) return;
 
-  event.preventDefault(); // ⬅️ СЮДИ, після перевірки
+  event.preventDefault(); 
 
   const login = localStorage.getItem('login');
   if (!login) {
